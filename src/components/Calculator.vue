@@ -16,6 +16,9 @@
       >
         ^
       </button>
+      <button @click="result = (op1 / op2) >> 0" :disabled="+op2 === 0">
+        div
+      </button>
     </div>
   </div>
 </template>
