@@ -6,14 +6,14 @@
       = {{ result }}
     </div>
     <div class="keyboard">
-      <button @click="calculate('+')">+</button>
-      <button @click="calculate('-')">-</button>
-      <button @click="calculate('×')">×</button>
-      <button @click="calculate('÷')" :disabled="cannot('÷')">÷</button>
-      <button @click="calculate('^')" :disabled="cannot('^')">
-        x<sup>y</sup>
+      <button
+        v-for="operand in operands"
+        :key="operand.op"
+        @click="calculate(operand.op)"
+        :disabled="cannot(operand.op)"
+      >
+        {{ operand.showAs ? operand.showAs : operand.op }}
       </button>
-      <button @click="calculate('div')" :disabled="cannot('div')">div</button>
     </div>
     <div class="checkbox-container">
       <input type="checkbox" id="viewnumpad" v-model="showNumpad" />
@@ -22,16 +22,10 @@
       </label>
     </div>
     <div class="keyboard numpad" v-show="showNumpad">
-      <button @click="add(1)">1</button>
-      <button @click="add(2)">2</button>
-      <button @click="add(3)">3</button>
-      <button @click="add(4)">4</button>
-      <button @click="add(5)">5</button>
-      <button @click="add(6)">6</button>
-      <button @click="add(7)">7</button>
-      <button @click="add(8)">8</button>
-      <button @click="add(9)">9</button>
-      <button @click="add(0)">0</button>
+      <button v-for="num in numbuttons" :key="num" @click="add(num)">
+        {{ num }}
+      </button>
+      <button @click="del">←</button>
     </div>
     <div class="radiogroup" v-show="showNumpad">
       <div>
@@ -51,12 +45,21 @@ export default {
   name: "Calculator",
   data() {
     return {
+      operands: [
+        { op: "+" },
+        { op: "-" },
+        { op: "×" },
+        { op: "÷" },
+        { op: "^", showAs: "xⁿ" },
+        { op: "div" },
+      ],
       op1: 0,
       op2: 0,
       result: 0,
       operator: "",
       opchoise: 1,
       showNumpad: false,
+      numbuttons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
     };
   },
   methods: {
@@ -91,12 +94,20 @@ export default {
         case "^":
           return this.op1 === 0 && this.op2 <= 0;
       }
+      return false;
     },
     add(value) {
       if (this.opchoise === 1) {
         this.op1 = this.op1 * 10 + value;
       } else if (this.opchoise === 2) {
         this.op2 = this.op2 * 10 + value;
+      }
+    },
+    del() {
+      if (this.opchoise === 1) {
+        this.op1 = (this.op1 / 10) >> 0;
+      } else if (this.opchoise === 2) {
+        this.op2 = (this.op2 / 10) >> 0;
       }
     },
   },
