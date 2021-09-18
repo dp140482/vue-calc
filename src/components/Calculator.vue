@@ -1,24 +1,17 @@
 <template>
   <div class="hello">
     <div class="display">
-      <input v-model="op1" />
-      <input v-model="op2" />
+      <input v-model.number="op1" />
+      <input v-model.number="op2" />
       = {{ result }}
     </div>
     <div class="keyboard">
-      <button @click="result = +op1 + +op2">+</button>
-      <button @click="result = op1 - op2">-</button>
-      <button @click="result = op1 * op2">×</button>
-      <button @click="result = op1 / op2" :disabled="+op2 === 0">÷</button>
-      <button
-        @click="result = (+op1) ** +op2"
-        :disabled="+op1 === 0 && +op2 <= 0"
-      >
-        ^
-      </button>
-      <button @click="result = (op1 / op2) >> 0" :disabled="+op2 === 0">
-        div
-      </button>
+      <button @click="calculate('+')">+</button>
+      <button @click="calculate('-')">-</button>
+      <button @click="calculate('×')">×</button>
+      <button @click="calculate('÷')" :disabled="cannot('÷')">÷</button>
+      <button @click="calculate('^')" :disabled="cannot('^')">^</button>
+      <button @click="calculate('div')" :disabled="cannot('div')">div</button>
     </div>
   </div>
 </template>
@@ -33,6 +26,40 @@ export default {
       result: 0,
       operator: "",
     };
+  },
+  methods: {
+    calculate(operation = "+") {
+      switch (operation) {
+        case "+":
+          this.result = this.op1 + this.op2;
+          break;
+        case "-":
+          this.result = this.op1 - this.op2;
+          break;
+        case "×":
+          this.result = this.op1 * this.op2;
+          break;
+        case "÷":
+          this.result = this.op1 / this.op2;
+          break;
+        case "^":
+          this.result = this.op1 ** this.op2;
+          break;
+        case "div":
+          this.result = (this.op1 / this.op2) >> 0;
+          break;
+      }
+      return result;
+    },
+    cannot(operation = "÷") {
+      switch (operation) {
+        case "div":
+        case "÷":
+          return this.op2 === 0;
+        case "^":
+          return this.op1 === 0 && this.op2 <= 0;
+      }
+    },
   },
 };
 </script>
