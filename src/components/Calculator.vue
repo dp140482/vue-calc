@@ -1,14 +1,15 @@
 <template>
   <div class="hello">
     <div class="display">
-      <input v-model.number="op1" @focus="opchoise = 1" />
-      <input v-model.number="op2" @focus="opchoise = 2" />
+      <input v-model.number="op1" @focus="opchoise = 1" name="operand1" />
+      <input v-model.number="op2" @focus="opchoise = 2" name="operand2" />
       = {{ result }}
     </div>
     <div class="keyboard">
       <button
         v-for="operand in operands"
         :key="operand.op"
+        :name="operand.op"
         @click="calculate(operand.op)"
         :disabled="cannot(operand.op)"
       >
@@ -22,10 +23,15 @@
       </label>
     </div>
     <div class="keyboard numpad" v-show="showNumpad">
-      <button v-for="num in numbuttons" :key="num" @click="add(num)">
+      <button
+        v-for="num in numbuttons"
+        :key="num"
+        :name="num"
+        @click="add(num)"
+      >
         {{ num }}
       </button>
-      <button @click="del">←</button>
+      <button @click="del" name="del">←</button>
     </div>
     <div class="radiogroup" v-show="showNumpad">
       <div>
@@ -84,7 +90,7 @@ export default {
           this.result = (this.op1 / this.op2) >> 0;
           break;
       }
-      return result;
+      return this.result;
     },
     cannot(operation = "÷") {
       switch (operation) {
