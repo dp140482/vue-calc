@@ -153,7 +153,7 @@ export default {
         min-height: 40px
         color: darkred
         &:disabled
-            color: darkgray;
+            color: darkgray
         & sup
             font-size: 8pt
 
