@@ -4,9 +4,7 @@
 
 ## Netlify
 
-```
 https://peaceful-centaur-6743e2.netlify.app/
-```
 
 ## Сборка и запуск локально
 
